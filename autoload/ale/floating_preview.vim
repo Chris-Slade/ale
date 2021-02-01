@@ -8,10 +8,10 @@ function! ale#floating_preview#Show(lines, ...) abort
     if exists('*nvim_open_win')
         call s:Show(a:lines, a:000)
     elseif exists('*popup_atcursor')
-        if exists('b:ale_popup_winid')
-            call popup_close(b:ale_popup_winid)
+        if exists('t:ale_popup_winid')
+            call popup_close(t:ale_popup_winid)
         endif
-        let b:ale_popup_winid = popup_atcursor(a:lines, {
+        let t:ale_popup_winid = popup_atcursor(a:lines, {
         \ 'width': 42,
         \ 'height': 4,
         \ 'padding': [0, 1, 0, 1],
