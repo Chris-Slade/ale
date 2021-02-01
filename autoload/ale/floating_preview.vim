@@ -5,6 +5,25 @@
 " Precondition: exists('*nvim_open_win')
 
 function! ale#floating_preview#Show(lines, ...) abort
+    if exists('*nvim_open_win')
+        call s:Show(a:lines, a:000)
+    elseif exists('*popup_atcursor')
+        if exists('b:ale_popup_winid')
+            call popup_close(b:ale_popup_winid)
+        endif
+        let b:ale_popup_winid = popup_atcursor(a:lines, {
+        \ 'width': 42,
+        \ 'height': 4,
+        \ 'padding': [0, 1, 0, 1],
+        \ 'border': [1, 1, 1, 1],
+        \ 'moved': 'any',
+        \ })
+    else
+        echom 'Floating windows not supported in this vim instance'
+    endif
+endfunction
+
+function! s:Show(lines, ...) abort
     if !exists('*nvim_open_win')
         execute 'echom ''Floating windows not supported in this vim instance.'''
 
