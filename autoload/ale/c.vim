@@ -491,7 +491,7 @@ function! ale#c#GetCFlags(buffer, output) abort
         endif
     endif
 
-    if s:CanParseMakefile(a:buffer) && !empty(a:output) && !empty(l:cflags)
+    if empty(l:cflags) && s:CanParseMakefile(a:buffer) && !empty(a:output)
         let l:cflags = ale#c#ParseCFlagsFromMakeOutput(a:buffer, a:output)
     endif
 
@@ -505,6 +505,10 @@ endfunction
 function! ale#c#GetMakeCommand(buffer) abort
     if s:CanParseMakefile(a:buffer)
         let l:path = ale#path#FindNearestFile(a:buffer, 'Makefile')
+
+        if empty(l:path)
+            let l:path = ale#path#FindNearestFile(a:buffer, 'GNUmakefile')
+        endif
 
         if !empty(l:path)
             let l:always_make = ale#Var(a:buffer, 'c_always_make')
