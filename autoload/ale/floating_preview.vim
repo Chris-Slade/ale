@@ -132,6 +132,9 @@ function! s:Create(options) abort
 endfunction
 
 function! s:Close() abort
+    let l:mode = mode()
+    let l:restore_visual = l:mode is# 'v' || l:mode is# 'V' || l:mode is# "\<C-V>"
+
     if !exists('w:preview')
         return
     endif
@@ -143,4 +146,8 @@ function! s:Close() abort
     endif
 
     unlet w:preview
+
+    if l:restore_visual
+        normal! gv
+    endif
 endfunction
