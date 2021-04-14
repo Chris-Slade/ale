@@ -11,7 +11,18 @@ function! ale#floating_preview#Show(lines, ...) abort
         if exists('t:ale_popup_winid')
             call popup_close(t:ale_popup_winid)
         endif
+        let [l:win_row, l:win_col] = win_screenpos(winnr())
+        let [ignore, l:row, l:col, ignore2] = getpos('.')
+        let hpos = 'bot'
+        let vpos = 'left'
+        if l:win_col + l:col + 42 > &columns
+            let vpos = 'right'
+        endif
+        if l:win_row + l:row < 10
+            let hpos = 'top'
+        end
         let t:ale_popup_winid = popup_atcursor(a:lines, {
+        \ 'pos': hpos . vpos,
         \ 'width': 42,
         \ 'height': 4,
         \ 'padding': [0, 1, 0, 1],
